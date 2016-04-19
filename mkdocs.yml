@@ -1,0 +1,8 @@
+site_name: PyHDL
+theme: 'material'
+pages:
+- Introduction: 'index.md'
+- Builtin Gates:
+  - NAND Gate: 'builtins/nand.md'
+  - AND Gate: 'builtins/and.md'
+  - D Flip Flop: 'builtins/dff.md'
