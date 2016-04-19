@@ -139,12 +139,13 @@ class DFF(Gate):
         A D flip flop
     """
 
-    def __init__(self, input, output):
+    def __init__(self, input, output, default):
         self.input = input
         self.output = output
         self.register(self.input)
         self.register_output(self.output)
-        self.state = None
+        self.state = default
+        self.output.val = default
 
     def tick(self):
         self.state = self.input.val

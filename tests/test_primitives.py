@@ -173,7 +173,10 @@ class TestDFFGate(unittest.TestCase):
 
     def setUp(self):
         self.a, self.out = Wire(), Wire()
-        self.dff_gate = DFF(self.a, self.out)
+        self.dff_gate = DFF(self.a, self.out, '0')
+
+    def test_default(self):
+        self.assertEqual(self.out.val, '0')
 
     def test_set(self):
         self.a.val = "1"
