@@ -120,3 +120,6 @@ Temporary Items
 
 # MkDocs build folder
 site/
+
+# Coverage reports
+cover/
