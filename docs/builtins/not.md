@@ -9,7 +9,7 @@
 
 ## Usage
 
-```
+```python
 >>> from pyhdl.primitives import NotGate
 >>> a = Wire()
 >>> out = Wire()

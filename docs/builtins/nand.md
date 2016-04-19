@@ -11,7 +11,7 @@
 
 ## Usage
 
-```
+```python
 >>> from pyhdl.primitives import NandGate
 >>> a = Wire()
 >>> b = Wire()

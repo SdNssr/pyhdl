@@ -11,7 +11,7 @@
 
 ## Usage
 
-```
+```python
 >>> from pyhdl.primitives import XorGate
 >>> a = Wire()
 >>> b = Wire()

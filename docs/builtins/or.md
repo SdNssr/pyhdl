@@ -11,7 +11,7 @@
 
 ## Usage
 
-```
+```python
 >>> from pyhdl.primitives import OrGate
 >>> a = Wire()
 >>> b = Wire()

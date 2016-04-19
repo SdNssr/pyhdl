@@ -11,7 +11,7 @@
 
 ## Usage
 
-```
+```python
 >>> from pyhdl.primitives import Norgate
 >>> a = Wire()
 >>> b = Wire()
