@@ -117,3 +117,6 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# MkDocs build folder
+site/

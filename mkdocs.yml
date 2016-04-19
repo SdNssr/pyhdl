@@ -1,5 +1,5 @@
 site_name: PyHDL
-theme: 'material'
+theme: 'readthedocs'
 pages:
 - Introduction: 'index.md'
 - Builtin Gates:
