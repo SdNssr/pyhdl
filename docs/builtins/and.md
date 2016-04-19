@@ -17,8 +17,8 @@
 >>> b = Wire()
 >>> out = Wire()
 >>> gate = NandGate(a=a, b=b, out=out)
->>> a.set('1')
->>> b.set('1')
->>> a.get()
+>>> a.val = '1'
+>>> b.val = '1'
+>>> out.val
 1
 ```

@@ -1,24 +1,20 @@
-# Nand gate
+# D flip flop
 
-## Truth table
+A D flip flop samples it's inputs on every tick, and sets it's outputs on every tock.
 
-| a | b | out |
-|---|---|-----|
-| 0 | 0 |  1  |
-| 1 | 0 |  0  |
-| 0 | 1 |  0  |
-| 1 | 1 |  0  |
-
-## Usage
+## Example
 
 ```
->>> from pyhdl.primitives import NandGate
->>> a = Wire()
->>> b = Wire()
->>> out = Wire()
->>> gate = NandGate(a=a, b=b, out=out)
->>> a.set('1')
->>> b.set('1')
->>> a.get()
-1
+>>> from pyhdl.primitives import DFF
+>>> input = Wire()
+>>> output = Wire()
+>>> flipflop = DFF(input=input, output=output)
+>>> input.set('1')
+>>> flipflop.tick()
+>>> output.val
+'x'
+>>> input.val = '0'
+>>> flipflop.tock()
+>>> output.val
+'1'
 ```
