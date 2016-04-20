@@ -1,16 +1,25 @@
 language: python
 python:
-  - "2.7"
-install: "pip install -r requirements.txt"
+- '2.7'
+install: pip install -r requirements.txt
 script: nosetests --with-coverage --cover-inclusive
 before_install:
-  - pip install codecov
+- pip install codecov
 after_success:
-  - codecov
+- codecov
 notifications:
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/5391c8616bc6f608fbc9
+    - https://webhooks.gitter.im/e/5391c8616bc6f608fbc9
     on_success: always
     on_failure: always
     on_start: never
+deploy:
+  provider: pypi
+  user: SdNssr
+  password:
+    secure: UZl3oultkMhlLdmgqfhS9qgfb4vamkOKEpZCkC2xEPzb72jbZoDXSXhYkMpQIXXvsqRb3Z3+6Fnc5PSVqu8/RKz0Fm3UShrbW3SyN3W1JLKIxqyCjD302Wd2/u+66BVScXlfKn3huh9Hbdro9oNlHzkcm/2ZSoa6h4pHv1ODRn3ijX0Fkf0Rj9dzGmre4QHEf6XSlmROv+ciDa5d9Vjl55YDRsdb3WBNz5fXfQdHvnCmfB9xeVTmLPhPf0jnqXBRAwjfAFbdLNOdwS04Jg0n4LEWN8xOBNEpQqX7Z5S5M0eTSoIpsXHnpbjESJc+fQClB+kL8e1XIqWd9IjYI/QqNrztm/hF7bCLoao0+daqJOfHRc9NmAORGEtgEDhBf3lU0muU/RSHhyEOcyJSDcSAasnXwLuKyQ9cGFNwKoikCKuUmUcZn+uhatW5FK+6wrkpH+fikIiFqsgJLX9EZmOgqDV66rbj5I0KYt4+E66swVcmjjvZzpqk49HQfVPI8a1KSTHQOJcL/CVkqDghqLvbQOsE7NT0nX7l1HNq3lvcVQQi/5ojesil2nPWRo/AbBJBhEtTpfoRJSlo1rvEacJO/HGESNFIJGfZmTIwXxJbgMaakuGXyhTNwPd0t0ZCdHMZgnOqpIlzQIimNSLz6gGgO4smW2XXAw38qlKdOfPaORg=
+  on:
+    tags: true
+    distributions: sdist bdist_wheel
+    repo: SdNssr/pyhdl
