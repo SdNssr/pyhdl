@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name = "pyhdl",
-    version = "0.1.0",
+    version = "0.1.1",
     description = ("A simpe HDL for learning hardware design."),
     long_description=__doc__,
     classifiers=[
