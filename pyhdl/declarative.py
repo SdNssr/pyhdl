@@ -53,8 +53,7 @@ class ModuleMetaClass(type):
 
         dict_['_pyhdl_stuff'] = {}
         dict_['_pyhdl_stuff']['gates'] = gates
-        dict_['_pyhdl_stuff']['gate_list'] = [gates[x]
-                                              for x in cls.topological_sort(gate_graph)]
+        dict_['_pyhdl_stuff']['gate_list'] = [gates[x] for x in cls.topological_sort(gate_graph)]
         dict_['_pyhdl_stuff']['inputs'] = inputs
         dict_['_pyhdl_stuff']['outputs'] = outputs
         dict_['_pyhdl_stuff']['internals'] = internals

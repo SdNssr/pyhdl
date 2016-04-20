@@ -66,7 +66,7 @@ class CompositeTest(unittest.TestCase):
         assert self.composite.view('g1') == self.gateDict['g1']
         assert self.composite.view('g2') == self.gateDict['g2']
         assert self.composite.view('g3') == self.gateDict['g3']
-        assert self.composite.view('g4') == None
+        assert self.composite.view('g4') is None
 
     def test_tick(self):
         self.composite.tick()

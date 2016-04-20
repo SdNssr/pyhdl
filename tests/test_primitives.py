@@ -13,7 +13,7 @@ class TwoInputTest(object):
         assert self.and_gate.view('a') == self.a
         assert self.and_gate.view('b') == self.b
         assert self.and_gate.view('out') == self.out
-        assert self.and_gate.view('garbage') == None
+        assert self.and_gate.view('garbage') is None
 
     def test_ticktock(self):
         self.and_gate.tick()
@@ -166,7 +166,7 @@ class TestNotGate(unittest.TestCase):
     def test_view(self):
         assert self.not_gate.view('a') == self.a
         assert self.not_gate.view('out') == self.out
-        assert self.not_gate.view('garbage') == None
+        assert self.not_gate.view('garbage') is None
 
 
 class TestDFFGate(unittest.TestCase):
@@ -194,4 +194,4 @@ class TestDFFGate(unittest.TestCase):
     def test_view(self):
         assert self.dff_gate.view('input') == self.a
         assert self.dff_gate.view('output') == self.out
-        assert self.dff_gate.view('garbage') == None
+        assert self.dff_gate.view('garbage') is None

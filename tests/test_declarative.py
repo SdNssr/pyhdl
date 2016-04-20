@@ -69,7 +69,7 @@ class ModuleTest(unittest.TestCase):
         assert self.composite.view('i1') is not None
         assert self.composite.view('i2') is not None
         assert self.composite.view('i3') is not None
-        assert self.composite.view('g4') == None
+        assert self.composite.view('g4') is None
 
     def test_tick(self):
         self.composite.tick()

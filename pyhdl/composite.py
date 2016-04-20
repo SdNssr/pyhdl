@@ -1,11 +1,11 @@
 """
     A composite gate.
-    
+
     gates - A list of gates in topological order.
     outputs - The outputs of the gate. (For debugging)
     inputs - The inputs of the gate. (For debugging)
     internals - The internal wires of the gate. (For debugging)
-    gateDict - 
+    gateDict - A dictionary of the gates in the composite gate. (For debugging)
 
 """
 
