@@ -12,6 +12,10 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         'Programming Language :: Python :: 2.7',
+        "Programming Language :: Python :: 3.2",
+        "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
         "License :: OSI Approved :: MIT License",
         "Topic :: Software Development :: Interpreters",
     ],
@@ -21,6 +25,9 @@ setup(
     url = "https://github.com/SdNssr/pyhdl",
     license = "MIT",
     packages=['pyhdl'],
+    install_requires=[
+        'six==1.10.0'
+    ],
     test_suite='nose.collector',
     tests_require=['nose'],
     zip_safe=False)

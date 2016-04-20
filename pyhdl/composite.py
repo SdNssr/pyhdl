@@ -9,7 +9,7 @@
 
 """
 
-from gate import Gate
+from pyhdl.gate import Gate
 
 class Composite(Gate):
 

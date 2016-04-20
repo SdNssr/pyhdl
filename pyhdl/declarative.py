@@ -4,10 +4,11 @@
 
 import copy
 import itertools
-from gate import Gate
-from wire import Wire, SubWire, BridgeWire
-from composite import Composite
-from utils import HDLError
+from pyhdl.gate import Gate
+from pyhdl.wire import Wire, SubWire, BridgeWire
+from pyhdl.composite import Composite
+from pyhdl.utils import HDLError
+import six
 
 
 class ModuleMetaClass(type):
@@ -23,14 +24,14 @@ class ModuleMetaClass(type):
         gate_graph = {}
 
         # Assemble gates
-        for attr, value in dict_.iteritems():
+        for attr, value in six.iteritems(dict_):
             if isinstance(value, Gate):
                 gates[attr] = value
 
-        gate_names = {value: key for key, value in gates.items()}
+        gate_names = {value: key for key, value in six.iteritems(gates)}
 
         # Assemble wires
-        for attr, value in dict_.iteritems():
+        for attr, value in six.iteritems(dict_):
             if isinstance(value, Wire) or isinstance(value, SubWire):
                 # Add wire to inputs, outputs or internals
                 if value.type == "input":
