@@ -13,3 +13,14 @@
 [![PyPI](https://img.shields.io/pypi/dd/pyhdl.svg?maxAge=2592000)]()
 
 A simple HDL written in Python.
+
+```python
+from pyhdl import Wire, AndGate
+
+a, b, out = Wire(), Wire(), Wire()
+gate = AndGate(a=a, b=b, out=out)
+a.val, b.val = '1', '1'
+print out.val # '1'
+```
+
+You can read the documentation at https://sdnssr.github.io/pyhdl.
