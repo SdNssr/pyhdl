@@ -17,6 +17,8 @@ setup(
     ],
     keywords = "hdl hardware design simple",
     author = "Saad Nasser",
+    author_email = "SdNssr@users.noreply.github.com",
+    url = "https://github.com/SdNssr/pyhdl",
     license = "MIT",
     packages=['pyhdl'],
     test_suite='nose.collector',
