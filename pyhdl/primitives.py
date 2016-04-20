@@ -112,7 +112,6 @@ class NotGate(Gate):
         self.register(a)
         self.register_output(out)
 
-
     def tick(self):
         pass
 

@@ -8,7 +8,8 @@ import unittest
 class ModuleTest(unittest.TestCase):
 
     def setUp(self):
-        self.module = type('TestModule', Module.__bases__, dict(Module.__dict__))
+        self.module = type('TestModule', Module.__bases__,
+                           dict(Module.__dict__))
 
         self.inputs = {
             "a": Wire(),
@@ -112,7 +113,7 @@ class ModuleMetaClassTest(unittest.TestCase):
             "c": []
         }
 
-        topo =  ModuleMetaClass.topological_sort(graph)
+        topo = ModuleMetaClass.topological_sort(graph)
 
         assert topo[0] == 'a'
         assert topo[1] == 'b'
@@ -165,4 +166,3 @@ class ModuleMetaClassTest(unittest.TestCase):
         assert pyhdl_stuff['outputs']['d'] == d
         assert pyhdl_stuff['outputs']['e'] == e
         assert pyhdl_stuff['internals']['c'] == c
-

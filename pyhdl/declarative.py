@@ -44,7 +44,8 @@ class ModuleMetaClass(type):
                 # Assemble DAG
                 driver = value.driver
                 if driver in gate_names:
-                    listeners = [gate_names[x] for x in value.listeners if x in gate_names]
+                    listeners = [gate_names[x]
+                                 for x in value.listeners if x in gate_names]
                     if driver in gate_graph:
                         gate_graph[gate_names[driver]] += listeners
                     else:
@@ -52,7 +53,8 @@ class ModuleMetaClass(type):
 
         dict_['_pyhdl_stuff'] = {}
         dict_['_pyhdl_stuff']['gates'] = gates
-        dict_['_pyhdl_stuff']['gate_list'] = [gates[x] for x in cls.topological_sort(gate_graph)]
+        dict_['_pyhdl_stuff']['gate_list'] = [gates[x]
+                                              for x in cls.topological_sort(gate_graph)]
         dict_['_pyhdl_stuff']['inputs'] = inputs
         dict_['_pyhdl_stuff']['outputs'] = outputs
         dict_['_pyhdl_stuff']['internals'] = internals
@@ -101,4 +103,3 @@ class Module(object):
                 BridgeWire(outputs[arg], kwargs[arg])
 
         return Composite(gates, inputs, outputs, internals, gateDict)
-

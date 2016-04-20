@@ -43,15 +43,12 @@ class TestWireMulti(unittest.TestCase):
     def setUp(self):
         self.wire = Wire(width=3)
 
-
     def test_default(self):
         assert self.wire.val == 'xxx'
-
 
     def set_val(self, x):
         self.wire.val = x
         assert self.wire.val == x
-
 
     def test_set(self):
         self.set_val('xxx')
@@ -69,7 +66,7 @@ class TestSubWire(unittest.TestCase):
 
     def setUp(self):
         self.wire = Wire(width=4)
-        self.subwire = SubWire(self.wire, slice(2,3))
+        self.subwire = SubWire(self.wire, slice(2, 3))
         self.evalCalls = 0
 
     def eval(self):
@@ -146,7 +143,7 @@ class TestSubWireSlice(unittest.TestCase):
     def test_iter(self):
         i = 0
         for item in self.wire.__iter__():
-            assert item == slice(i, i+1)
+            assert item == slice(i, i + 1)
             i += 1
 
     def test_len(self):

@@ -6,6 +6,7 @@
     view(signal) - View signal
 """
 
+
 class Gate(object):
 
     def register(self, *inputs):

@@ -33,10 +33,10 @@ class CompositeTest(unittest.TestCase):
         }
 
         self.composite = Composite(
-            self.gateList, 
-            self.inputs, 
-            self.outputs, 
-            self.internals, 
+            self.gateList,
+            self.inputs,
+            self.outputs,
+            self.internals,
             self.gateDict
         )
 
@@ -95,4 +95,3 @@ class CompositeTest(unittest.TestCase):
         assert self.composite.g3 == self.gateDict['g3']
         with self.assertRaises(AttributeError):
             self.composite.g4
-

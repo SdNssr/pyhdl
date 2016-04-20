@@ -56,7 +56,7 @@ class Wire(object):
 
     def __iter__(self):
         for i in range(0, self._width):
-            yield slice(i, i+1)
+            yield slice(i, i + 1)
 
     def __contains__(self, key):
         if key.stop > self._width:

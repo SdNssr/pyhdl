@@ -11,6 +11,7 @@
 
 from pyhdl.gate import Gate
 
+
 class Composite(Gate):
 
     def __init__(self, gates, inputs, outputs, internals, gateDict):

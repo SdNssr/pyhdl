@@ -3,4 +3,5 @@
 """
 
 
-class HDLError(RuntimeError): pass
+class HDLError(RuntimeError):
+    pass
