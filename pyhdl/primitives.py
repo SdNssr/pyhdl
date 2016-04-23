@@ -3,6 +3,7 @@
 """
 from pyhdl.gate import Gate
 from pyhdl.wire import Wire
+from six.moves import reduce
 
 
 class _Combinatorial(Gate):
