@@ -149,6 +149,99 @@ class NotGate(Gate):
             return None
 
 
+class Multiplexer(Gate):
+    """
+        A Multiplexer
+    """
+
+    attributes = 'abcdefghijklmnopqrstuvwxyz'
+
+    def __init__(self, width=1, ways=2, **kwargs):
+        self.signals = [self.attributes[way] for way in range(0, ways)]
+
+        for signal in self.signals:
+            wire = kwargs[signal]
+
+            setattr(self, signal, wire)
+
+            self.register(wire)
+
+        self.out = kwargs['out']
+        self.register_output(self.out)
+
+        self.sel = kwargs['sel']
+        self.register(self.sel)
+
+    def eval(self):
+        if 'x' in self.sel.val:
+            return
+        else:
+            vals = [getattr(self, signal).val for signal in self.signals]
+            selection = int(self.sel.val, 2)
+            self.out.val = vals[selection]
+
+    def view(self, signal):
+        if signal in self.signals:
+            return getattr(self, signal)
+        elif signal == 'out':
+            return self.out
+        elif signal == 'sel':
+            return self.sel
+        else:
+            return None
+
+
+class Demultiplexer(Gate):
+    """
+        A Demultiplexer
+    """
+
+    attributes = 'abcdefghijklmnopqrstuvwxyz'
+
+    def __init__(self, width=1, ways=2, **kwargs):
+        self.width = width
+        self.ways = ways
+
+        self.signals = [self.attributes[way] for way in range(0, ways)]
+
+        for signal in self.signals:
+            wire = kwargs[signal]
+
+            setattr(self, signal, wire)
+
+            self.register_output(wire)
+
+        self.input = kwargs['input']
+        self.sel = kwargs['sel']
+
+        self.register(self.sel)
+        self.register(self.input)
+
+    def eval(self):
+        if 'x' in self.sel.val:
+            return
+        else:
+            selection = int(self.sel.val, 2)
+
+            for x in range(0, self.ways):
+                name = self.signals[x]
+
+                if x == selection:
+                    getattr(self, name).val = self.input.val
+                else:
+                    getattr(self, name).val = '0' * self.width
+
+    def view(self, signal):
+        if signal in self.signals:
+            return getattr(self, signal)
+        elif signal == 'input':
+            return self.input
+        elif signal == 'sel':
+            return self.sel
+        else:
+            return None
+
+
 class DFF(Gate):
     """
         A D flip flop

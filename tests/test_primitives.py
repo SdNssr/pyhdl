@@ -195,3 +195,117 @@ class TestDFFGate(unittest.TestCase):
         assert self.dff_gate.view('input') == self.a
         assert self.dff_gate.view('output') == self.out
         assert self.dff_gate.view('garbage') is None
+
+
+class TestMultiplexer(unittest.TestCase):
+
+    def setUp(self):
+        self.a = Wire(width=3)
+        self.b = Wire(width=3)
+        self.c = Wire(width=3)
+        self.d = Wire(width=3)
+
+        self.a.val = '010'
+        self.b.val = '111'
+        self.c.val = '110'
+        self.d.val = '011'
+
+        self.sel = Wire(width=2)
+        self.out = Wire(width=3)
+
+        self.mux = Multiplexer(
+            a=self.a, 
+            b=self.b, 
+            c=self.c, 
+            d=self.d, 
+            sel=self.sel, 
+            out=self.out,
+            width=3,
+            ways=4
+        )
+
+    def test_default(self):
+        self.assertEqual(self.out.val, 'xxx')
+
+    def test_sel(self):
+        self.sel.val = '00'
+        self.assertEqual(self.out.val, '010')
+        self.sel.val = '01'
+        self.assertEqual(self.out.val, '111')
+        self.sel.val = '10'
+        self.assertEqual(self.out.val, '110')
+        self.sel.val = '11'
+        self.assertEqual(self.out.val, '011')
+
+
+    def test_view(self):
+        self.assertEqual(self.mux.view('a'), self.a)
+        self.assertEqual(self.mux.view('b'), self.b)
+        self.assertEqual(self.mux.view('c'), self.c)
+        self.assertEqual(self.mux.view('d'), self.d)
+        self.assertEqual(self.mux.view('out'), self.out)
+        self.assertEqual(self.mux.view('sel'), self.sel)
+        self.assertEqual(self.mux.view('garbage'), None)
+
+
+class TestDemultiplexer(unittest.TestCase):
+
+    def setUp(self):
+        self.a = Wire(width=3)
+        self.b = Wire(width=3)
+        self.c = Wire(width=3)
+        self.d = Wire(width=3)
+
+        self.sel = Wire(width=2)
+        self.input = Wire(width=3)
+
+        self.input.val = '101'
+
+        self.demux = Demultiplexer(
+            a=self.a, 
+            b=self.b, 
+            c=self.c, 
+            d=self.d, 
+            sel=self.sel, 
+            input=self.input,
+            width=3,
+            ways=4
+        )
+
+    def test_default(self):
+        self.assertEqual(self.a.val, 'xxx')
+        self.assertEqual(self.b.val, 'xxx')
+        self.assertEqual(self.c.val, 'xxx')
+        self.assertEqual(self.d.val, 'xxx')
+
+    def test_sel(self):
+        self.sel.val = '00'
+        self.assertEqual(self.a.val, '101')
+        self.assertEqual(self.b.val, '000')
+        self.assertEqual(self.c.val, '000')
+        self.assertEqual(self.d.val, '000')
+        self.sel.val = '01'
+        self.assertEqual(self.a.val, '000')
+        self.assertEqual(self.b.val, '101')
+        self.assertEqual(self.c.val, '000')
+        self.assertEqual(self.d.val, '000')
+        self.sel.val = '10'
+        self.assertEqual(self.a.val, '000')
+        self.assertEqual(self.b.val, '000')
+        self.assertEqual(self.c.val, '101')
+        self.assertEqual(self.d.val, '000')
+        self.sel.val = '11'
+        self.assertEqual(self.a.val, '000')
+        self.assertEqual(self.b.val, '000')
+        self.assertEqual(self.c.val, '000')
+        self.assertEqual(self.d.val, '101')
+
+
+    def test_view(self):
+        self.assertEqual(self.demux.view('a'), self.a)
+        self.assertEqual(self.demux.view('b'), self.b)
+        self.assertEqual(self.demux.view('c'), self.c)
+        self.assertEqual(self.demux.view('d'), self.d)
+        self.assertEqual(self.demux.view('input'), self.input)
+        self.assertEqual(self.demux.view('sel'), self.sel)
+        self.assertEqual(self.demux.view('garbage'), None)
