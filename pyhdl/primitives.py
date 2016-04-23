@@ -111,7 +111,7 @@ class XorGate(_SimpleCombinatorial):
             return "0"
 
 
-class NotGate(Gate):
+class NotGate(_Combinatorial):
     """
         A Not Gate
     """
@@ -149,7 +149,7 @@ class NotGate(Gate):
             return None
 
 
-class Multiplexer(Gate):
+class Multiplexer(_Combinatorial):
     """
         A Multiplexer
     """
@@ -191,7 +191,7 @@ class Multiplexer(Gate):
             return None
 
 
-class Demultiplexer(Gate):
+class Demultiplexer(_Combinatorial):
     """
         A Demultiplexer
     """
