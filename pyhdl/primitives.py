@@ -242,6 +242,52 @@ class Demultiplexer(_Combinatorial):
             return None
 
 
+class HalfAdder(_Combinatorial):
+    """
+        A half adder.
+    """
+
+    def __init__(self, a, b, out, carry):
+        self.a = a
+        self.b = b
+
+        self.out = out
+        self.carry = carry
+
+        self.register(self.a, self.b)
+
+        self.register_output(self.out)
+        self.register_output(self.carry)
+
+    def eval(self):
+        if (self.a.val == 'x') or (self.b.val == 'x'):
+            self.out.val = 'x'
+            self.carry.val = 'x'
+            return
+
+        if (self.a.val == '1') ^ (self.b.val == '1'):
+            self.out.val = '1'
+        else:
+            self.out.val = '0'
+
+        if (self.a.val == '1') and (self.b.val == '1'):
+            self.carry.val = '1'
+        else:
+            self.carry.val = '0'
+
+    def view(self, signal):
+        if signal == "a":
+            return self.a
+        elif signal == "b":
+            return self.b
+        elif signal == "out":
+            return self.out
+        elif signal == "carry":
+            return self.carry
+        else:
+            return None
+
+
 class DFF(Gate):
     """
         A D flip flop

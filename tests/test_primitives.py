@@ -169,34 +169,6 @@ class TestNotGate(unittest.TestCase):
         assert self.not_gate.view('garbage') is None
 
 
-class TestDFFGate(unittest.TestCase):
-
-    def setUp(self):
-        self.a, self.out = Wire(), Wire()
-        self.dff_gate = DFF(self.a, self.out, '0')
-
-    def test_default(self):
-        self.assertEqual(self.out.val, '0')
-
-    def test_set(self):
-        self.a.val = "1"
-        self.dff_gate.tick()
-        self.dff_gate.tock()
-        self.assertEqual(self.out.val, "1")
-
-    def test_hold(self):
-        self.a.val = "1"
-        self.dff_gate.tick()
-        self.a.val = "0"
-        self.dff_gate.tock()
-        self.assertEqual(self.out.val, "1")
-
-    def test_view(self):
-        assert self.dff_gate.view('input') == self.a
-        assert self.dff_gate.view('output') == self.out
-        assert self.dff_gate.view('garbage') is None
-
-
 class TestMultiplexer(unittest.TestCase):
 
     def setUp(self):
@@ -309,3 +281,78 @@ class TestDemultiplexer(unittest.TestCase):
         self.assertEqual(self.demux.view('input'), self.input)
         self.assertEqual(self.demux.view('sel'), self.sel)
         self.assertEqual(self.demux.view('garbage'), None)
+
+
+class TestHalfAdder(unittest.TestCase):
+
+    def setUp(self):
+        self.a = Wire()
+        self.b = Wire()
+        self.out = Wire()
+        self.carry = Wire()
+
+        self.adder = HalfAdder(a=self.a, b=self.b, out=self.out, carry=self.carry)
+
+    def test_view(self):
+        self.assertEqual(self.adder.view('a'), self.a)
+        self.assertEqual(self.adder.view('b'), self.b)
+        self.assertEqual(self.adder.view('out'), self.out)
+        self.assertEqual(self.adder.view('carry'), self.carry)
+        self.assertEqual(self.adder.view('garbage'), None)
+
+    def test_ticktock(self):
+        self.adder.tick()
+        self.adder.tock()
+        self.test_default()
+
+    def test_default(self):
+        self.assertEqual(self.out.val, 'x')
+        self.assertEqual(self.carry.val, 'x')
+
+    def test_tt(self):
+        self.a.val, self.b.val = "1", "1"
+        self.assertEqual(self.out.val, "0")
+        self.assertEqual(self.carry.val, "1")
+
+    def test_tf(self):
+        self.a.val, self.b.val = "1", "0"
+        self.assertEqual(self.out.val, "1")
+        self.assertEqual(self.carry.val, "0")
+
+    def test_ft(self):
+        self.a.val, self.b.val = "0", "1"
+        self.assertEqual(self.out.val, "1")
+        self.assertEqual(self.carry.val, "0")
+
+    def test_ff(self):
+        self.a.val, self.b.val = "0", "0"
+        self.assertEqual(self.out.val, "0")
+        self.assertEqual(self.carry.val, "0")
+
+
+class TestDFFGate(unittest.TestCase):
+
+    def setUp(self):
+        self.a, self.out = Wire(), Wire()
+        self.dff_gate = DFF(self.a, self.out, '0')
+
+    def test_default(self):
+        self.assertEqual(self.out.val, '0')
+
+    def test_set(self):
+        self.a.val = "1"
+        self.dff_gate.tick()
+        self.dff_gate.tock()
+        self.assertEqual(self.out.val, "1")
+
+    def test_hold(self):
+        self.a.val = "1"
+        self.dff_gate.tick()
+        self.a.val = "0"
+        self.dff_gate.tock()
+        self.assertEqual(self.out.val, "1")
+
+    def test_view(self):
+        assert self.dff_gate.view('input') == self.a
+        assert self.dff_gate.view('output') == self.out
+        assert self.dff_gate.view('garbage') is None
