@@ -14,91 +14,100 @@ class _Combinatorial(Gate):
         pass
 
 
-class _TwoInputCombinatorial(_Combinatorial):
+class _SimpleCombinatorial(_Combinatorial):
 
-    def __init__(self, a, b, out):
-        self.a = a
-        self.b = b
-        self.out = out
-        self.register(a, b)
-        self.register_output(out)
-        self.eval()
+    attributes = 'abcdefghijklmnopqrstuvwxyz'
+
+    def __init__(self, width=1, ways=2, **kwargs):
+        self.signals = set([self.attributes[way] for way in range(0, ways)])
+
+        for signal in self.signals:
+            wire = kwargs[signal]
+
+            setattr(self, signal, wire)
+
+            self.register(wire)
+
+        self.out = kwargs['out']
+        self.register_output(self.out)
 
     def eval(self):
-        if self.a.val == "x" or self.b.val == "x":
-            self.out.val = 'x'
+        vals = [getattr(self, signal).val for signal in self.signals]
+        computed = [reduce(self.biteval, seq) for seq in zip(*vals)]
+        self.out.val = ''.join(computed)
+
+    def biteval(self, a, b):
+        if (a == "x") or (b == "x"):
+            return 'x'
         else:
-            self.evaluate()
+            return self.evaluate(a, b)
 
     def view(self, signal):
-        if signal == "a":
-            return self.a
-        elif signal == "b":
-            return self.b
-        elif signal == "out":
+        if signal in self.signals:
+            return getattr(self, signal)
+        elif signal == 'out':
             return self.out
         else:
             return None
 
-
-class NandGate(_TwoInputCombinatorial):
+class NandGate(_SimpleCombinatorial):
     """
         A Nand Gate.
     """
 
-    def evaluate(self):
-        if (self.a.val == "1") and (self.b.val == "1"):
-            self.out.val = "0"
+    def evaluate(self, a, b):
+        if (a == "1") and (b == "1"):
+            return "0"
         else:
-            self.out.val = "1"
+            return "1"
 
 
-class AndGate(_TwoInputCombinatorial):
+class AndGate(_SimpleCombinatorial):
     """
         An And gate.
     """
 
-    def evaluate(self):
-        if (self.a.val == "1") and (self.b.val == "1"):
-            self.out.val = "1"
+    def evaluate(self, a, b):
+        if (a == "1") and (b == "1"):
+            return "1"
         else:
-            self.out.val = "0"
+            return "0"
 
 
-class NorGate(_TwoInputCombinatorial):
+class NorGate(_SimpleCombinatorial):
     """
         A Nor gate.
     """
 
-    def evaluate(self):
-        if (self.a.val == "1") or (self.b.val == "1"):
-            self.out.val = "0"
+    def evaluate(self, a, b):
+        if (a == "1") or (b == "1"):
+            return "0"
         else:
-            self.out.val = "1"
+            return "1"
 
 
-class OrGate(_TwoInputCombinatorial):
+class OrGate(_SimpleCombinatorial):
     """
         An Or gate.
     """
 
-    def evaluate(self):
-        if (self.a.val == "1") or (self.b.val == "1"):
-            self.out.val = "1"
+    def evaluate(self, a, b):
+        if (a == "1") or (b == "1"):
+            return "1"
         else:
-            self.out.val = "0"
+            return "0"
 
 
-class XorGate(_TwoInputCombinatorial):
+class XorGate(_SimpleCombinatorial):
     """
         An Xor gate.
     """
 
-    def evaluate(self):
-        if (self.a.val == "1") ^ (self.b.val == "1"):
-            self.out.val = "1"
+    def evaluate(self, a, b):
+        if (a == "1") ^ (b == "1"):
+            return "1"
         else:
-            self.out.val = "0"
+            return "0"
 
 
 class NotGate(Gate):
@@ -106,7 +115,7 @@ class NotGate(Gate):
         A Not Gate
     """
 
-    def __init__(self, a, out):
+    def __init__(self, a, out, width=1):
         self.a = a
         self.out = out
         self.register(a)
@@ -119,10 +128,16 @@ class NotGate(Gate):
         pass
 
     def eval(self):
-        if self.a.val == "1":
-            self.out.val = "0"
+        computed = [self.evaluate(val) for val in self.a.val]
+        self.out.val = ''.join(computed)
+
+    def evaluate(self, a):
+        if a == 'x':
+            return 'x'
+        elif a == "1":
+            return "0"
         else:
-            self.out.val = "1"
+            return "1"
 
     def view(self, signal):
         if signal == "a":

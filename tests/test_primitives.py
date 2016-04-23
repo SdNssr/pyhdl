@@ -7,7 +7,7 @@ class TwoInputTest(object):
 
     def setUp(self):
         self.a, self.b, self.out = Wire(), Wire(), Wire()
-        self.and_gate = self.gate(self.a, self.b, self.out)
+        self.and_gate = self.gate(a=self.a, b=self.b, out=self.out)
 
     def test_view(self):
         assert self.and_gate.view('a') == self.a
