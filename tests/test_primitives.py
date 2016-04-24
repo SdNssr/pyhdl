@@ -330,6 +330,52 @@ class TestHalfAdder(unittest.TestCase):
         self.assertEqual(self.carry.val, "0")
 
 
+class TestFullAdder(unittest.TestCase):
+
+    def setUp(self):
+        self.a = Wire()
+        self.b = Wire()
+        self.cin = Wire()
+        self.out = Wire()
+        self.cout = Wire()
+
+        self.adder = FullAdder(a=self.a, b=self.b, out=self.out, cin=self.cin, cout=self.cout)
+
+    def test_view(self):
+        self.assertEqual(self.adder.view('a'), self.a)
+        self.assertEqual(self.adder.view('b'), self.b)
+        self.assertEqual(self.adder.view('out'), self.out)
+        self.assertEqual(self.adder.view('cout'), self.cout)
+        self.assertEqual(self.adder.view('cin'), self.cin)
+        self.assertEqual(self.adder.view('garbage'), None)
+
+    def test_ticktock(self):
+        self.adder.tick()
+        self.adder.tock()
+        self.test_default()
+
+    def test_default(self):
+        self.assertEqual(self.out.val, 'x')
+        self.assertEqual(self.cout.val, 'x')
+
+    def assertVals(self, a, b, cin, out, cout):
+        self.a.val = a
+        self.b.val = b
+        self.cin.val = cin
+        self.assertEqual(self.out.val, out)
+        self.assertEqual(self.cout.val, cout)
+
+    def test_functionality(self):
+        self.assertVals('0', '0', '0', '0', '0')
+        self.assertVals('0', '0', '1', '1', '0')
+        self.assertVals('0', '1', '0', '1', '0')
+        self.assertVals('0', '1', '1', '0', '1')
+        self.assertVals('1', '0', '0', '1', '0')
+        self.assertVals('1', '0', '1', '0', '1')
+        self.assertVals('1', '1', '0', '0', '1')
+        self.assertVals('1', '1', '1', '1', '1')
+        
+
 class TestDFFGate(unittest.TestCase):
 
     def setUp(self):

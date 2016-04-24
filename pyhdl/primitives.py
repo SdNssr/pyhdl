@@ -288,6 +288,58 @@ class HalfAdder(_Combinatorial):
             return None
 
 
+class FullAdder(_Combinatorial):
+    """
+        A full adder.
+    """
+
+    values = {
+        ('0', '0', '0'): ('0', '0'),
+        ('0', '0', '1'): ('1', '0'),
+        ('0', '1', '0'): ('1', '0'),
+        ('0', '1', '1'): ('0', '1'),
+        ('1', '0', '0'): ('1', '0'),
+        ('1', '0', '1'): ('0', '1'),
+        ('1', '1', '0'): ('0', '1'),
+        ('1', '1', '1'): ('1', '1'),
+    }
+
+    def __init__(self, a, b, cin, out, cout):
+        self.a = a
+        self.b = b
+        self.cin = cin
+
+        self.out = out
+        self.cout = cout
+
+        self.register(self.a, self.b, self.cin)
+
+        self.register_output(self.out)
+        self.register_output(self.cout)
+
+    def eval(self):
+        if (self.a.val == 'x') or (self.b.val == 'x') or (self.cin.val == 'x'):
+            self.out.val = 'x'
+            self.cout.val = 'x'
+            return
+
+        self.out.val, self.cout.val = self.values[(self.a.val, self.b.val, self.cin.val)]
+
+    def view(self, signal):
+        if signal == "a":
+            return self.a
+        elif signal == "b":
+            return self.b
+        elif signal == "cin":
+            return self.cin
+        elif signal == "out":
+            return self.out
+        elif signal == "cout":
+            return self.cout
+        else:
+            return None
+
+
 class DFF(Gate):
     """
         A D flip flop
