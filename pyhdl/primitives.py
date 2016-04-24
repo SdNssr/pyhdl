@@ -340,6 +340,55 @@ class FullAdder(_Combinatorial):
             return None
 
 
+class Adder(_Combinatorial):
+    """
+        An adder.
+    """
+
+
+    def __init__(self, a, b, out, cout, width=1):
+        self.width = width
+        self.size = (1 << width) - 1
+        self.a = a
+        self.b = b
+
+        self.out = out
+        self.cout = cout
+
+        self.register(self.a, self.b)
+
+        self.register_output(self.out)
+        self.register_output(self.cout)
+
+    def eval(self):
+        if ('x' in self.a.val) or ('x' in self.b.val):
+            self.out.val = 'x' * self.width
+            self.cout.val = 'x' * self.width
+            return
+
+        aval = int(self.a.val, 2)
+        bval = int(self.b.val, 2)
+
+        self.out.val = bin((aval + bval) % self.size)[2:]
+
+        if ((aval + bval + 0.) / self.size) >= 1:
+            self.cout.val = '1'
+        else:
+            self.cout.val = '0'
+
+    def view(self, signal):
+        if signal == "a":
+            return self.a
+        elif signal == "b":
+            return self.b
+        elif signal == "out":
+            return self.out
+        elif signal == "cout":
+            return self.cout
+        else:
+            return None
+
+
 class DFF(Gate):
     """
         A D flip flop

@@ -374,7 +374,50 @@ class TestFullAdder(unittest.TestCase):
         self.assertVals('1', '0', '1', '0', '1')
         self.assertVals('1', '1', '0', '0', '1')
         self.assertVals('1', '1', '1', '1', '1')
-        
+
+
+class TestAdder(unittest.TestCase):
+
+    def setUp(self):
+        self.a = Wire(width=16)
+        self.b = Wire(width=16)
+        self.out = Wire(width=16)
+        self.cout = Wire(width=16)
+
+        self.adder = Adder(a=self.a, b=self.b, out=self.out, cout=self.cout, width=16)
+
+    def test_view(self):
+        self.assertEqual(self.adder.view('a'), self.a)
+        self.assertEqual(self.adder.view('b'), self.b)
+        self.assertEqual(self.adder.view('out'), self.out)
+        self.assertEqual(self.adder.view('cout'), self.cout)
+        self.assertEqual(self.adder.view('garbage'), None)
+
+    def test_ticktock(self):
+        self.adder.tick()
+        self.adder.tock()
+        self.test_default()
+
+    def test_default(self):
+        self.assertEqual(self.out.val, 'xxxxxxxxxxxxxxxx')
+        self.assertEqual(self.cout.val, 'xxxxxxxxxxxxxxxx')
+
+    def assertVals(self, a, b):
+        self.a.val = bin(a)[2:]
+        self.b.val = bin(b)[2:]
+        self.assertEqual(int(self.out.val, 2), (a + b) % 65535)
+        if ((a + b + 1.0) / 65536) >= 1:
+            self.assertEqual(int(self.cout.val, 2), 1)
+        else:
+            self.assertEqual(int(self.cout.val, 2), 0)
+
+    def test_functionality(self):
+        self.assertVals(20, 30)
+        self.assertVals(40, 70)
+        self.assertVals(892, 243)
+        self.assertVals(12394, 78643)
+        self.assertVals(893, 809)
+
 
 class TestDFFGate(unittest.TestCase):
 
