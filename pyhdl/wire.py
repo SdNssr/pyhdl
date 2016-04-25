@@ -48,6 +48,9 @@ class Wire(object):
             truncated = value % (self._msb)
             self._value = '1' + bin(truncated)[2:]
 
+        for listener in self._listeners:
+                listener.eval()
+
     @property
     def driver(self):
         return self._driver
@@ -101,17 +104,6 @@ class SubWire(object):
         msb = self._msb if self.val[0] == '1' else 0
         val = int(self.val[1:], 2)
         return val - msb
-
-    @ival.setter
-    def ival(self, value):
-        if value == 0:
-            self.val = '0' * self._width
-        elif (value/abs(value)) == 1:
-            truncated = value % (self._msb - 1)
-            self.val = '0' + bin(truncated)[2:]
-        else:
-            truncated = value % (self._msb)
-            self.val = '1' + bin(truncated)[2:]
 
     def addListener(self, listener):
         self._listeners.append(listener)
