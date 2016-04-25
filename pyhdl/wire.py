@@ -11,6 +11,7 @@ class Wire(object):
     def __init__(self, width=1, type="undefined"):
         self._width = width
         self._value = width * 'x'
+        self._msb = 1 << (self._width - 1)
 
         self.type = type
 
@@ -29,6 +30,23 @@ class Wire(object):
                 listener.eval()
         else:
             raise HDLError("Invalid value passed to wire: {0}".format(value))
+
+    @property
+    def ival(self):
+        msb = self._msb if self._value[0] == '1' else 0
+        val = int(self._value[1:], 2)
+        return val - msb
+
+    @ival.setter
+    def ival(self, value):
+        if value == 0:
+            self._value = '0' * self._width
+        elif (value/abs(value)) == 1:
+            truncated = value % (self._msb - 1)
+            self._value = '0' + bin(truncated)[2:]
+        else:
+            truncated = value % (self._msb)
+            self._value = '1' + bin(truncated)[2:]
 
     @property
     def driver(self):

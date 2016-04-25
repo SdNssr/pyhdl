@@ -62,6 +62,26 @@ class TestWireMulti(unittest.TestCase):
             self.wire.val = 'ABC'
 
 
+class TestWireIval(unittest.TestCase):
+
+    def setUp(self):
+        self.wire = Wire(width=16)
+
+    def test_default(self):
+        assert self.wire.val == 'x' * 16
+
+    def set_ival(self, x):
+        self.wire.ival = x
+        self.assertEqual(self.wire.ival, x)
+
+    def test_set(self):
+        self.set_ival(123)
+        self.set_ival(435)
+        self.set_ival(-452)
+        self.set_ival(23458)
+        self.set_ival(-23458)
+
+
 class TestSubWire(unittest.TestCase):
 
     def setUp(self):
