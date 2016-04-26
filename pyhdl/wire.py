@@ -98,6 +98,57 @@ class Wire(object):
             return True
 
 
+class ConstantWire(object):
+
+    def __init__(self, value, width=1, type="undefined"):
+        self._width = width
+        self._value = value
+        self._msb = 1 << (self._width - 1)
+
+        self.type = type
+
+    @property
+    def val(self):
+        return self._value
+
+    @property
+    def uival(self):
+        return int(self._value, 2)
+
+    @property
+    def ival(self):
+        msb = self._msb if self._value[0] == '1' else 0
+        val = int(self._value[1:], 2)
+        return val - msb
+
+    @property
+    def driver(self):
+        return None
+
+    @property
+    def listeners(self):
+        return []
+
+    def addListener(self, listener):
+        listener.eval()
+
+    def __len__(self):
+        return self._width
+
+    def __getitem__(self, key):
+        return SubWire(self, key)
+
+    def __iter__(self):
+        for i in range(0, self._width):
+            yield slice(i, i + 1)
+
+    def __contains__(self, key):
+        if key.stop > self._width:
+            return False
+        else:
+            return True
+
+
 class SubWire(object):
 
     def __init__(self, node, sub, type="undefined"):

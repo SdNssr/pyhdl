@@ -1,4 +1,4 @@
-from pyhdl.wire import Wire, SubWire, BridgeWire
+from pyhdl.wire import Wire, SubWire, BridgeWire, ConstantWire
 from pyhdl.utils import HDLError
 import unittest
 
@@ -91,6 +91,15 @@ class TestWireIval(unittest.TestCase):
         self.set_uival(54)
         self.set_uival(234)
         self.set_uival(1223)
+
+
+class TestConstantWire(unittest.TestCase):
+
+    def test_cw(self):
+        wire = ConstantWire(value='111', width=3)
+        self.assertEqual(wire.val, '111')
+        self.assertEqual(wire.ival, -1)
+        self.assertEqual(wire.uival, 7)
 
 
 class TestSubWire(unittest.TestCase):
