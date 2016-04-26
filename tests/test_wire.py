@@ -74,12 +74,23 @@ class TestWireIval(unittest.TestCase):
         self.wire.ival = x
         self.assertEqual(self.wire.ival, x)
 
+    def set_uival(self, x):
+        self.wire.uival = x
+        self.assertEqual(self.wire.uival, x)
+
     def test_set(self):
         self.set_ival(123)
         self.set_ival(435)
         self.set_ival(-452)
         self.set_ival(23458)
         self.set_ival(-23458)
+
+    def test_uset(self):
+        self.set_uival(23)
+        self.set_uival(823)
+        self.set_uival(54)
+        self.set_uival(234)
+        self.set_uival(1223)
 
 
 class TestSubWire(unittest.TestCase):

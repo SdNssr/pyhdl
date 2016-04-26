@@ -12,6 +12,10 @@ class Wire(object):
         self._width = width
         self._value = width * 'x'
         self._msb = 1 << (self._width - 1)
+        self._max = (1 << self._width) - 1
+
+        self._format_trunc = '0>{}b'.format(self._width - 1)
+        self._format = '0>{}b'.format(self._width)
 
         self.type = type
 
@@ -32,6 +36,14 @@ class Wire(object):
             raise HDLError("Invalid value passed to wire: {0}".format(value))
 
     @property
+    def uival(self):
+        return int(self._value, 2)
+
+    @uival.setter
+    def uival(self, val):
+        self._value = format(val, self._format)[-self._width:]
+
+    @property
     def ival(self):
         msb = self._msb if self._value[0] == '1' else 0
         val = int(self._value[1:], 2)
@@ -43,10 +55,10 @@ class Wire(object):
             self._value = '0' * self._width
         elif (value/abs(value)) == 1:
             truncated = value % (self._msb - 1)
-            self._value = '0' + bin(truncated)[2:]
+            self._value = '0' + format(truncated, self._format_trunc)[-(self._width-1):]
         else:
             truncated = value % (self._msb)
-            self._value = '1' + bin(truncated)[2:]
+            self._value = '1' + format(truncated, self._format_trunc)[-(self._width-1):]
 
         for listener in self._listeners:
                 listener.eval()
@@ -104,6 +116,10 @@ class SubWire(object):
         msb = self._msb if self.val[0] == '1' else 0
         val = int(self.val[1:], 2)
         return val - msb
+
+    @property
+    def uival(self):
+        return int(self.val, 2)
 
     def addListener(self, listener):
         self._listeners.append(listener)
