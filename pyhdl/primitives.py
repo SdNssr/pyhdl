@@ -454,3 +454,57 @@ class Register(Gate):
             return self.write
         else:
             return None
+
+
+class Memory(Gate):
+    """
+        A variable width and depth memory.
+    """
+
+    def __init__(self, input, output, write, address, default, width=1):
+        self.input = input
+        self.output = output
+        self.write = write
+        self.address = address
+        self.width = width
+
+        self.register(input, write, address)
+        self.register_output(output)
+
+        self.default = default
+        self.memory = {}
+
+    def eval(self):
+        pass
+
+    def tick(self):
+        if 'x' in self.address.val:
+            self.output.val = self.width * 'x'
+            return
+
+        if self.write.val == '1':
+            addr = self.address.uival
+            self.memory[addr] = self.input.uival
+
+    def tock(self):
+        if 'x' in self.address.val:
+            self.output.val = self.width * 'x'
+            return
+
+        addr = self.address.uival
+        if addr in self.memory:
+            self.output.uival = self.memory[addr]
+        else:
+            self.output.uival = self.default
+
+    def view(self, signal):
+        if signal == "input":
+            return self.input
+        elif signal == "output":
+            return self.output
+        elif signal == "write":
+            return self.write
+        elif signal == "address":
+            return self.address
+        else:
+            return None

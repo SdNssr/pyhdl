@@ -18,5 +18,7 @@ __all__ = [
     'HalfAdder',
     'FullAdder',
     'Adder',
-    'DFF'
+    'DFF',
+    'Register',
+    'Memory',
 ]

@@ -477,3 +477,41 @@ class TestRegister(unittest.TestCase):
         assert self.register.view('output') == self.output
         assert self.register.view('write') == self.write
         assert self.register.view('garbage') is None
+
+
+class TestMemory(unittest.TestCase):
+
+    def setUp(self):
+        self.input = Wire(width=16)
+        self.output = Wire(width=16)
+        self.address = Wire(width=16)
+        self.write = Wire()
+        self.memory = Memory(input=self.input, output=self.output, address=self.address, write=self.write, default=0, width=16)
+
+    def test_default(self):
+        self.assertEqual(self.output.val, 'x'*16)
+
+    def test_default_ticktock(self):
+        self.memory.tick(), self.memory.tock()
+        self.test_default()
+
+    def test_default_value(self):
+        self.address.uival = 1223
+        self.memory.tick(), self.memory.tock()
+        self.assertEqual(self.output.val, '0'*16)
+
+    def test_store(self):
+        self.address.uival = 323
+        self.input.uival = 2324
+        self.write.val = '1'
+        self.memory.tick()
+        self.write.val = '0' 
+        self.memory.tock(), self.memory.tick(), self.memory.tock()
+        self.assertEqual(self.output.uival, 2324)
+
+    def test_view(self):
+        self.assertEqual(self.memory.view('input'), self.input)
+        self.assertEqual(self.memory.view('output'), self.output)
+        self.assertEqual(self.memory.view('address'), self.address)
+        self.assertEqual(self.memory.view('write'), self.write)
+        self.assertEqual(self.memory.view('dfdfs'), None)
