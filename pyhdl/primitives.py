@@ -417,3 +417,40 @@ class DFF(Gate):
             return self.output
         else:
             return None
+
+
+class Register(Gate):
+    """
+        A variable width register.
+    """
+
+    def __init__(self, input, write, output, default):
+        self.input = input
+        self.write = write
+        self.output = output
+        self.state = default
+
+        self.register(input, write)
+        self.register_output(output)
+
+        self.output.val = default
+
+    def tick(self):
+        if self.write.val == '1':
+            self.state = self.input.val
+
+    def tock(self):
+        self.output.val = self.state
+
+    def eval(self):
+        pass
+
+    def view(self, signal):
+        if signal == "input":
+            return self.input
+        elif signal == "output":
+            return self.output
+        elif signal == "write":
+            return self.write
+        else:
+            return None

@@ -445,3 +445,35 @@ class TestDFFGate(unittest.TestCase):
         assert self.dff_gate.view('input') == self.a
         assert self.dff_gate.view('output') == self.out
         assert self.dff_gate.view('garbage') is None
+
+
+class TestRegister(unittest.TestCase):
+
+    def setUp(self):
+        self.input = Wire(width=4)
+        self.output = Wire(width=4)
+        self.write = Wire()
+        self.register = Register(input=self.input, output=self.output, write=self.write, default='0000')
+
+    def test_default(self):
+        self.assertEqual(self.output.val, '0000')
+
+    def test_hold(self):
+        self.input.uival = 4
+        self.register.tick()
+        self.register.tock()
+        self.test_default()
+
+    def test_set(self):
+        self.input.uival = 4
+        self.write.val = '1'
+        self.register.tick()
+        self.input.uival = 3
+        self.register.tock()
+        self.assertEqual(self.output.uival, 4)
+
+    def test_view(self):
+        assert self.register.view('input') == self.input
+        assert self.register.view('output') == self.output
+        assert self.register.view('write') == self.write
+        assert self.register.view('garbage') is None
