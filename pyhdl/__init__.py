@@ -5,6 +5,7 @@ from pyhdl.declarative import Module
 __all__ = [
     'Wire', 
     'SubWire', 
+    'ConstantWire',
     'Module',
     'NandGate',
     'AndGate',
@@ -12,5 +13,10 @@ __all__ = [
     'OrGate',
     'XorGate',
     'NotGate',
+    'Multiplexer',
+    'Demultiplexer',
+    'HalfAdder',
+    'FullAdder',
+    'Adder',
     'DFF'
 ]
