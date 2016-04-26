@@ -1,6 +1,8 @@
+from nose.tools import set_trace
 from pyhdl.primitives import *
 from pyhdl.wire import Wire
 import unittest
+import ctypes
 
 
 class TwoInputTest(object):
@@ -403,20 +405,18 @@ class TestAdder(unittest.TestCase):
         self.assertEqual(self.cout.val, 'xxxxxxxxxxxxxxxx')
 
     def assertVals(self, a, b):
-        self.a.val = bin(a)[2:]
-        self.b.val = bin(b)[2:]
-        self.assertEqual(int(self.out.val, 2), (a + b) % 65535)
-        if ((a + b + 1.0) / 65536) >= 1:
-            self.assertEqual(int(self.cout.val, 2), 1)
-        else:
-            self.assertEqual(int(self.cout.val, 2), 0)
+        self.a.ival = a
+        self.b.ival = b
+        out = ctypes.c_int16(a + b).value
+        self.assertEqual(self.out.ival, out)
 
     def test_functionality(self):
         self.assertVals(20, 30)
         self.assertVals(40, 70)
         self.assertVals(892, 243)
-        self.assertVals(12394, 78643)
-        self.assertVals(893, 809)
+        self.assertVals(893, -809)
+        self.assertVals(16384, 16384)
+        self.assertVals(8098, -14359)
 
 
 class TestDFFGate(unittest.TestCase):

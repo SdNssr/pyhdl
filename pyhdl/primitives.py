@@ -366,12 +366,11 @@ class Adder(_Combinatorial):
             self.cout.val = 'x' * self.width
             return
 
-        aval = int(self.a.val, 2)
-        bval = int(self.b.val, 2)
+        s = self.a.uival + self.b.uival
 
-        self.out.val = bin((aval + bval) % self.size)[2:]
+        self.out.uival = s
 
-        if ((aval + bval + 0.) / self.size) >= 1:
+        if self.out.uival != s:
             self.cout.val = '1'
         else:
             self.cout.val = '0'
