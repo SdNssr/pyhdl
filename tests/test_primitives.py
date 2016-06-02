@@ -2,6 +2,7 @@ from nose.tools import set_trace
 from pyhdl.primitives import *
 from pyhdl.wire import Wire
 import unittest
+import random
 import ctypes
 
 
@@ -22,26 +23,23 @@ class TwoInputTest(object):
         self.and_gate.tock()
         self.test_default()
 
+    def assertVal(self, a, b, out):
+        self.a.val = a
+        self.b.val = b
+        self.and_gate.eval()
+
+        self.assertEqual(self.out.val, out)
+
 
 class TestNandGate(TwoInputTest, unittest.TestCase):
 
     gate = NandGate
 
-    def test_tt(self):
-        self.a.val, self.b.val = "1", "1"
-        self.assertEqual(self.out.val, "0")
-
-    def test_tf(self):
-        self.a.val, self.b.val = "1", "0"
-        self.assertEqual(self.out.val, "1")
-
-    def test_ft(self):
-        self.a.val, self.b.val = "0", "1"
-        self.assertEqual(self.out.val, "1")
-
-    def test_ff(self):
-        self.a.val, self.b.val = "0", "0"
-        self.assertEqual(self.out.val, "1")
+    def test_values(self):
+        self.assertVal('1', '1', '0')
+        self.assertVal('1', '0', '1')
+        self.assertVal('0', '1', '1')
+        self.assertVal('0', '0', '1')
 
     def test_default(self):
         self.assertEqual(self.out.val, "x")
@@ -51,21 +49,11 @@ class TestAndGate(TwoInputTest, unittest.TestCase):
 
     gate = AndGate
 
-    def test_tt(self):
-        self.a.val, self.b.val = "1", "1"
-        self.assertEqual(self.out.val, "1")
-
-    def test_tf(self):
-        self.a.val, self.b.val = "1", "0"
-        self.assertEqual(self.out.val, "0")
-
-    def test_ft(self):
-        self.a.val, self.b.val = "0", "1"
-        self.assertEqual(self.out.val, "0")
-
-    def test_ff(self):
-        self.a.val, self.b.val = "0", "0"
-        self.assertEqual(self.out.val, "0")
+    def test_values(self):
+        self.assertVal('1', '1', '1')
+        self.assertVal('1', '0', '0')
+        self.assertVal('0', '1', '0')
+        self.assertVal('0', '0', '0')
 
     def test_default(self):
         self.assertEqual(self.out.val, "x")
@@ -75,21 +63,11 @@ class TestNorGate(TwoInputTest, unittest.TestCase):
 
     gate = NorGate
 
-    def test_tt(self):
-        self.a.val, self.b.val = "1", "1"
-        self.assertEqual(self.out.val, "0")
-
-    def test_tf(self):
-        self.a.val, self.b.val = "1", "0"
-        self.assertEqual(self.out.val, "0")
-
-    def test_ft(self):
-        self.a.val, self.b.val = "0", "1"
-        self.assertEqual(self.out.val, "0")
-
-    def test_ff(self):
-        self.a.val, self.b.val = "0", "0"
-        self.assertEqual(self.out.val, "1")
+    def test_values(self):
+        self.assertVal('1', '1', '0')
+        self.assertVal('1', '0', '0')
+        self.assertVal('0', '1', '0')
+        self.assertVal('0', '0', '1')
 
     def test_default(self):
         self.assertEqual(self.out.val, "x")
@@ -99,21 +77,11 @@ class TestOrGate(TwoInputTest, unittest.TestCase):
 
     gate = OrGate
 
-    def test_tt(self):
-        self.a.val, self.b.val = "1", "1"
-        self.assertEqual(self.out.val, "1")
-
-    def test_tf(self):
-        self.a.val, self.b.val = "1", "0"
-        self.assertEqual(self.out.val, "1")
-
-    def test_ft(self):
-        self.a.val, self.b.val = "0", "1"
-        self.assertEqual(self.out.val, "1")
-
-    def test_ff(self):
-        self.a.val, self.b.val = "0", "0"
-        self.assertEqual(self.out.val, "0")
+    def test_values(self):
+        self.assertVal('1', '1', '1')
+        self.assertVal('1', '0', '1')
+        self.assertVal('0', '1', '1')
+        self.assertVal('0', '0', '0')
 
     def test_default(self):
         self.assertEqual(self.out.val, "x")
@@ -123,21 +91,11 @@ class TestXorGate(TwoInputTest, unittest.TestCase):
 
     gate = XorGate
 
-    def test_tt(self):
-        self.a.val, self.b.val = "1", "1"
-        self.assertEqual(self.out.val, "0")
-
-    def test_tf(self):
-        self.a.val, self.b.val = "1", "0"
-        self.assertEqual(self.out.val, "1")
-
-    def test_ft(self):
-        self.a.val, self.b.val = "0", "1"
-        self.assertEqual(self.out.val, "1")
-
-    def test_ff(self):
-        self.a.val, self.b.val = "0", "0"
-        self.assertEqual(self.out.val, "0")
+    def test_values(self):
+        self.assertVal('1', '1', '0')
+        self.assertVal('1', '0', '1')
+        self.assertVal('0', '1', '1')
+        self.assertVal('0', '0', '0')
 
     def test_default(self):
         self.assertEqual(self.out.val, "x")
@@ -154,13 +112,14 @@ class TestNotGate(unittest.TestCase):
         self.not_gate.tock()
         self.test_default()
 
-    def test_t(self):
-        self.a.val = "1"
-        self.assertEqual(self.out.val, "0")
+    def assertVal(self, a, out):
+        self.a.val = a
+        self.not_gate.eval()
+        self.assertEqual(self.out.val, out)
 
-    def test_f(self):
-        self.a.val = "0"
-        self.assertEqual(self.out.val, "1")
+    def test_vals(self):
+        self.assertVal('0', '1')
+        self.assertVal('1', '0')
 
     def test_default(self):
         self.assertEqual(self.out.val, "x")
@@ -174,49 +133,46 @@ class TestNotGate(unittest.TestCase):
 class TestMultiplexer(unittest.TestCase):
 
     def setUp(self):
-        self.a = Wire(width=3)
-        self.b = Wire(width=3)
-        self.c = Wire(width=3)
-        self.d = Wire(width=3)
-
-        self.a.val = '010'
-        self.b.val = '111'
-        self.c.val = '110'
-        self.d.val = '011'
+        self.inputs = [
+            Wire(width=3),
+            Wire(width=3),
+            Wire(width=3),
+            Wire(width=3),
+        ]
 
         self.sel = Wire(width=2)
         self.out = Wire(width=3)
 
         self.mux = Multiplexer(
-            a=self.a, 
-            b=self.b, 
-            c=self.c, 
-            d=self.d, 
+            a=self.inputs[0], 
+            b=self.inputs[1], 
+            c=self.inputs[2], 
+            d=self.inputs[3], 
             sel=self.sel, 
             out=self.out,
             width=3,
             ways=4
         )
 
+    def fuzzyEval(self):
+        for input in self.inputs:
+            input.uival = random.randrange(0, 8)
+        self.sel.uival = random.randrange(0, 4)
+        self.mux.eval()
+        self.assertEqual(self.inputs[self.sel.uival].val, self.out.val)
+
     def test_default(self):
         self.assertEqual(self.out.val, 'xxx')
 
     def test_sel(self):
-        self.sel.val = '00'
-        self.assertEqual(self.out.val, '010')
-        self.sel.val = '01'
-        self.assertEqual(self.out.val, '111')
-        self.sel.val = '10'
-        self.assertEqual(self.out.val, '110')
-        self.sel.val = '11'
-        self.assertEqual(self.out.val, '011')
-
+        for x in range(0, 10):
+            self.fuzzyEval()
 
     def test_view(self):
-        self.assertEqual(self.mux.view('a'), self.a)
-        self.assertEqual(self.mux.view('b'), self.b)
-        self.assertEqual(self.mux.view('c'), self.c)
-        self.assertEqual(self.mux.view('d'), self.d)
+        self.assertEqual(self.mux.view('a'), self.inputs[0])
+        self.assertEqual(self.mux.view('b'), self.inputs[1])
+        self.assertEqual(self.mux.view('c'), self.inputs[2])
+        self.assertEqual(self.mux.view('d'), self.inputs[3])
         self.assertEqual(self.mux.view('out'), self.out)
         self.assertEqual(self.mux.view('sel'), self.sel)
         self.assertEqual(self.mux.view('garbage'), None)
@@ -225,61 +181,46 @@ class TestMultiplexer(unittest.TestCase):
 class TestDemultiplexer(unittest.TestCase):
 
     def setUp(self):
-        self.a = Wire(width=3)
-        self.b = Wire(width=3)
-        self.c = Wire(width=3)
-        self.d = Wire(width=3)
+        self.outputs = [
+            Wire(width=3),
+            Wire(width=3),
+            Wire(width=3),
+            Wire(width=3),
+        ]
 
         self.sel = Wire(width=2)
         self.input = Wire(width=3)
 
-        self.input.val = '101'
-
         self.demux = Demultiplexer(
-            a=self.a, 
-            b=self.b, 
-            c=self.c, 
-            d=self.d, 
+            a=self.outputs[0], 
+            b=self.outputs[1], 
+            c=self.outputs[2], 
+            d=self.outputs[3], 
             sel=self.sel, 
             input=self.input,
             width=3,
             ways=4
         )
 
+    def fuzzyEval(self):
+        self.input.uival = random.randrange(0, 8)
+        self.sel.uival = random.randrange(0, 4)
+        self.demux.eval()
+        self.assertEqual(self.outputs[self.sel.uival].val, self.input.val)
+
     def test_default(self):
-        self.assertEqual(self.a.val, 'xxx')
-        self.assertEqual(self.b.val, 'xxx')
-        self.assertEqual(self.c.val, 'xxx')
-        self.assertEqual(self.d.val, 'xxx')
+        for output in self.outputs:
+            self.assertEqual(output.val, 'xxx')
 
     def test_sel(self):
-        self.sel.val = '00'
-        self.assertEqual(self.a.val, '101')
-        self.assertEqual(self.b.val, '000')
-        self.assertEqual(self.c.val, '000')
-        self.assertEqual(self.d.val, '000')
-        self.sel.val = '01'
-        self.assertEqual(self.a.val, '000')
-        self.assertEqual(self.b.val, '101')
-        self.assertEqual(self.c.val, '000')
-        self.assertEqual(self.d.val, '000')
-        self.sel.val = '10'
-        self.assertEqual(self.a.val, '000')
-        self.assertEqual(self.b.val, '000')
-        self.assertEqual(self.c.val, '101')
-        self.assertEqual(self.d.val, '000')
-        self.sel.val = '11'
-        self.assertEqual(self.a.val, '000')
-        self.assertEqual(self.b.val, '000')
-        self.assertEqual(self.c.val, '000')
-        self.assertEqual(self.d.val, '101')
-
+        for x in range(0, 10):
+            self.fuzzyEval()
 
     def test_view(self):
-        self.assertEqual(self.demux.view('a'), self.a)
-        self.assertEqual(self.demux.view('b'), self.b)
-        self.assertEqual(self.demux.view('c'), self.c)
-        self.assertEqual(self.demux.view('d'), self.d)
+        self.assertEqual(self.demux.view('a'), self.outputs[0])
+        self.assertEqual(self.demux.view('b'), self.outputs[1])
+        self.assertEqual(self.demux.view('c'), self.outputs[2])
+        self.assertEqual(self.demux.view('d'), self.outputs[3])
         self.assertEqual(self.demux.view('input'), self.input)
         self.assertEqual(self.demux.view('sel'), self.sel)
         self.assertEqual(self.demux.view('garbage'), None)
@@ -313,21 +254,25 @@ class TestHalfAdder(unittest.TestCase):
 
     def test_tt(self):
         self.a.val, self.b.val = "1", "1"
+        self.adder.eval()
         self.assertEqual(self.out.val, "0")
         self.assertEqual(self.carry.val, "1")
 
     def test_tf(self):
         self.a.val, self.b.val = "1", "0"
+        self.adder.eval()
         self.assertEqual(self.out.val, "1")
         self.assertEqual(self.carry.val, "0")
 
     def test_ft(self):
         self.a.val, self.b.val = "0", "1"
+        self.adder.eval()
         self.assertEqual(self.out.val, "1")
         self.assertEqual(self.carry.val, "0")
 
     def test_ff(self):
         self.a.val, self.b.val = "0", "0"
+        self.adder.eval()
         self.assertEqual(self.out.val, "0")
         self.assertEqual(self.carry.val, "0")
 
@@ -364,6 +309,7 @@ class TestFullAdder(unittest.TestCase):
         self.a.val = a
         self.b.val = b
         self.cin.val = cin
+        self.adder.eval()
         self.assertEqual(self.out.val, out)
         self.assertEqual(self.cout.val, cout)
 
@@ -407,6 +353,7 @@ class TestAdder(unittest.TestCase):
     def assertVals(self, a, b):
         self.a.ival = a
         self.b.ival = b
+        self.adder.eval()
         out = ctypes.c_int16(a + b).value
         self.assertEqual(self.out.ival, out)
 

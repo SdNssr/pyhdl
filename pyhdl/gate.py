@@ -8,11 +8,4 @@
 
 
 class Gate(object):
-
-    def register(self, *inputs):
-        for input in inputs:
-            input.addListener(self)
-
-    def register_output(self, *outputs):
-        for output in outputs:
-            output.driver = self
+    pass

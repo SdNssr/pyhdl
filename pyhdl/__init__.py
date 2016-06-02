@@ -1,12 +1,12 @@
 from pyhdl.wire import *
 from pyhdl.primitives import *
-from pyhdl.declarative import Module
+from pyhdl.simulator import Simulator
 
 __all__ = [
     'Wire', 
     'SubWire', 
     'ConstantWire',
-    'Module',
+    'Simulator',
     'NandGate',
     'AndGate',
     'NorGate',

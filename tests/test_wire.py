@@ -1,4 +1,4 @@
-from pyhdl.wire import Wire, SubWire, BridgeWire, ConstantWire
+from pyhdl.wire import Wire, SubWire, ConstantWire
 from pyhdl.utils import HDLError
 import unittest
 
@@ -23,19 +23,6 @@ class TestWire(unittest.TestCase):
 
         with self.assertRaises(HDLError) as cm:
             self.wire.val = 'A'
-
-    def test_listeners(self):
-        self.wire.addListener('a')
-        assert self.wire.listeners == ['a']
-
-    def test_driver(self):
-        self.wire.driver = 'abc'
-        assert self.wire.driver == 'abc'
-
-    def test_multiple_driver(self):
-        with self.assertRaises(HDLError) as cm:
-            self.wire.driver = 'abc'
-            self.wire.driver = 'xyz'
 
 
 class TestWireMulti(unittest.TestCase):
@@ -125,19 +112,6 @@ class TestSubWire(unittest.TestCase):
         self.set_val('0')
         self.set_val('1')
 
-    def test_listeners(self):
-        self.subwire.addListener('a')
-        assert self.subwire.listeners == ['a']
-
-    def test_driver(self):
-        self.wire.driver = 'abc'
-        assert self.subwire.driver == 'abc'
-
-    def test_eval(self):
-        self.subwire.addListener(self)
-        self.subwire.eval()
-        assert self.evalCalls == 1
-
 
 class TestSubWireSlice(unittest.TestCase):
 
@@ -162,19 +136,6 @@ class TestSubWireSlice(unittest.TestCase):
         self.set_val('0')
         self.set_val('1')
 
-    def test_listeners(self):
-        self.subwire.addListener('a')
-        assert self.subwire.listeners == ['a']
-
-    def test_driver(self):
-        self.wire.driver = 'abc'
-        assert self.subwire.driver == 'abc'
-
-    def test_eval(self):
-        self.subwire.addListener(self)
-        self.subwire.eval()
-        assert self.evalCalls == 1
-
     def test_contains(self):
         assert slice(2, 3) in self.wire
         assert slice(10, 12) not in self.wire
@@ -188,24 +149,3 @@ class TestSubWireSlice(unittest.TestCase):
 
     def test_len(self):
         assert len(self.wire) == 4
-
-
-class TestBridgeWire(unittest.TestCase):
-
-    def setUp(self):
-        self.input = Wire()
-        self.output = Wire()
-        self.bridge = BridgeWire(self.input, self.output)
-
-    def test_default(self):
-        assert self.output.val == 'x'
-
-    def set_val(self, x):
-        self.input.val = x
-        assert self.output.val == x
-
-    def test_set(self):
-        self.set_val('x')
-        self.set_val('X')
-        self.set_val('0')
-        self.set_val('1')

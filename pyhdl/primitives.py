@@ -9,10 +9,10 @@ from six.moves import reduce
 class _Combinatorial(Gate):
 
     def tick(self):
-        pass
+        self.eval()
 
     def tock(self):
-        pass
+        self.eval()
 
 
 class _SimpleCombinatorial(_Combinatorial):
@@ -24,13 +24,9 @@ class _SimpleCombinatorial(_Combinatorial):
 
         for signal in self.signals:
             wire = kwargs[signal]
-
             setattr(self, signal, wire)
 
-            self.register(wire)
-
         self.out = kwargs['out']
-        self.register_output(self.out)
 
     def eval(self):
         vals = [getattr(self, signal).val for signal in self.signals]
@@ -119,8 +115,6 @@ class NotGate(_Combinatorial):
     def __init__(self, a, out, width=1):
         self.a = a
         self.out = out
-        self.register(a)
-        self.register_output(out)
 
     def tick(self):
         pass
@@ -161,16 +155,10 @@ class Multiplexer(_Combinatorial):
 
         for signal in self.signals:
             wire = kwargs[signal]
-
             setattr(self, signal, wire)
 
-            self.register(wire)
-
         self.out = kwargs['out']
-        self.register_output(self.out)
-
         self.sel = kwargs['sel']
-        self.register(self.sel)
 
     def eval(self):
         if 'x' in self.sel.val:
@@ -206,16 +194,11 @@ class Demultiplexer(_Combinatorial):
 
         for signal in self.signals:
             wire = kwargs[signal]
-
             setattr(self, signal, wire)
-
-            self.register_output(wire)
 
         self.input = kwargs['input']
         self.sel = kwargs['sel']
 
-        self.register(self.sel)
-        self.register(self.input)
 
     def eval(self):
         if 'x' in self.sel.val:
@@ -254,10 +237,7 @@ class HalfAdder(_Combinatorial):
         self.out = out
         self.carry = carry
 
-        self.register(self.a, self.b)
 
-        self.register_output(self.out)
-        self.register_output(self.carry)
 
     def eval(self):
         if (self.a.val == 'x') or (self.b.val == 'x'):
@@ -312,10 +292,7 @@ class FullAdder(_Combinatorial):
         self.out = out
         self.cout = cout
 
-        self.register(self.a, self.b, self.cin)
 
-        self.register_output(self.out)
-        self.register_output(self.cout)
 
     def eval(self):
         if (self.a.val == 'x') or (self.b.val == 'x') or (self.cin.val == 'x'):
@@ -355,10 +332,6 @@ class Adder(_Combinatorial):
         self.out = out
         self.cout = cout
 
-        self.register(self.a, self.b)
-
-        self.register_output(self.out)
-        self.register_output(self.cout)
 
     def eval(self):
         if ('x' in self.a.val) or ('x' in self.b.val):
@@ -396,8 +369,6 @@ class DFF(Gate):
     def __init__(self, input, output, default):
         self.input = input
         self.output = output
-        self.register(self.input)
-        self.register_output(self.output)
         self.state = default
         self.output.val = default
 
@@ -430,8 +401,6 @@ class Register(Gate):
         self.output = output
         self.state = default
 
-        self.register(input, write)
-        self.register_output(output)
 
         self.output.val = default
 
@@ -467,9 +436,6 @@ class Memory(Gate):
         self.write = write
         self.address = address
         self.width = width
-
-        self.register(input, write, address)
-        self.register_output(output)
 
         self.default = default
         self.memory = {}
