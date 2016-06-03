@@ -21,16 +21,28 @@ def flatten_list(l):
 class Simulator(object):
     """
         A simulator for composite gates.
+
+        :param gates: An arbitrarily nested list of gates.
+        :type gates: list
     """
 
     def __init__(self, gates):
         self.gates = flatten_list(gates)
 
     def eval(self):
+        """
+            Evaluate all the gates.
+        """
         [gate.eval() for gate in self.gates]
     
     def tick(self):
+        """
+            Send a tick to all the gates.
+        """
         [gate.tick() for gate in self.gates]
     
     def tock(self):
+        """
+            Send a tock to all the gates.
+        """
         [gate.tock() for gate in self.gates]

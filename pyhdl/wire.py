@@ -5,6 +5,14 @@ from pyhdl.utils import *
 
 
 class Wire(object):
+    """
+        An arbitrary width wire.
+
+        :param width: The width of the wire.
+        :type width: int
+        :param type: An arbitrary string to tag a wire. (DEPRECATED)
+        :type type: str
+    """
 
     allowed = set('01xX')
 
@@ -21,6 +29,9 @@ class Wire(object):
 
     @property
     def val(self):
+        """
+            The binary value of a wire.
+        """
         return self._value
 
     @val.setter
@@ -32,6 +43,9 @@ class Wire(object):
 
     @property
     def uival(self):
+        """
+            The (unsigned) integer value of the wire.
+        """
         return int(self._value, 2)
 
     @uival.setter
@@ -40,6 +54,9 @@ class Wire(object):
 
     @property
     def ival(self):
+        """
+            The two's complement value of the wire.
+        """
         msb = self._msb if self._value[0] == '1' else 0
         val = int(self._value[1:], 2)
         return val - msb
@@ -73,6 +90,16 @@ class Wire(object):
 
 
 class ConstantWire(object):
+    """
+        A wire with a constant value.
+
+        :param value: The (binary) value of the wire.
+        :type value: str
+        :param width: The width of the wire.
+        :type width: int
+        :param type: An arbitrary string to tag a wire. (DEPRECATED)
+        :type type: str
+    """
 
     def __init__(self, value, width=1, type="undefined"):
         self._width = width
@@ -83,14 +110,23 @@ class ConstantWire(object):
 
     @property
     def val(self):
+        """
+            The binary value of the wire.
+        """
         return self._value
 
     @property
     def uival(self):
+        """
+            The (unsigned) integer value of the wire.
+        """
         return int(self._value, 2)
 
     @property
     def ival(self):
+        """
+            The two's complement value of the wire.
+        """
         msb = self._msb if self._value[0] == '1' else 0
         val = int(self._value[1:], 2)
         return val - msb
@@ -113,6 +149,25 @@ class ConstantWire(object):
 
 
 class SubWire(object):
+    """
+        A slice of a wire.
+
+        You can index into a wire using standard array notation to create a slice. e.g:
+
+        >>> from pyhdl import ConstantWire
+        >>> a = ConstantWire(value="010101", width=6)
+        >>> b = a[0]
+        >>> b.val
+        "0"
+        >>> c = a[0:2]
+        >>> c.val
+        "01"
+
+        :param node: The wire you want to slice.
+        :param sub: The slice you want to take.
+        :param type: An arbitrary string to tag a wire. (DEPRECATED)
+        :type type: str
+    """
 
     def __init__(self, node, sub, type="undefined"):
         self.node = node
@@ -121,6 +176,9 @@ class SubWire(object):
 
     @property
     def val(self):
+        """
+            The binary value of the wire.
+        """
         return self.node.val[self.sub]
 
     @val.setter
@@ -131,12 +189,18 @@ class SubWire(object):
 
     @property
     def ival(self):
+        """
+            The two's complement value of the wire.
+        """
         msb = self._msb if self.val[0] == '1' else 0
         val = int(self.val[1:], 2)
         return val - msb
 
     @property
     def uival(self):
+        """
+            The (unsigned) integer value of the wire.
+        """
         return int(self.val, 2)
 
     def __len__(self):

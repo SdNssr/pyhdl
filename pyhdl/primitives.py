@@ -97,7 +97,7 @@ class OrGate(_SimpleCombinatorial):
 
 class XorGate(_SimpleCombinatorial):
     """
-        An Xor gate.
+        A Xor gate.
     """
 
     def evaluate(self, a, b):
@@ -109,11 +109,16 @@ class XorGate(_SimpleCombinatorial):
 
 class NotGate(_Combinatorial):
     """
-        A Not Gate
+        A Not Gate.
+
+        :param inp: The input wire.
+        :param out: The output wire.
+        :param width: The width of the inputs.
+        :type width: int
     """
 
-    def __init__(self, a, out, width=1):
-        self.a = a
+    def __init__(self, inp, out, width=1):
+        self.inp = inp
         self.out = out
 
     def tick(self):
@@ -123,20 +128,20 @@ class NotGate(_Combinatorial):
         pass
 
     def eval(self):
-        computed = [self.evaluate(val) for val in self.a.val]
+        computed = [self.evaluate(val) for val in self.inp.val]
         self.out.val = ''.join(computed)
 
-    def evaluate(self, a):
-        if a == 'x':
+    def evaluate(self, inp):
+        if inp == 'x':
             return 'x'
-        elif a == "1":
+        elif inp == "1":
             return "0"
         else:
             return "1"
 
     def view(self, signal):
-        if signal == "a":
-            return self.a
+        if signal == "inp":
+            return self.inp
         elif signal == "out":
             return self.out
         else:
@@ -145,7 +150,22 @@ class NotGate(_Combinatorial):
 
 class Multiplexer(_Combinatorial):
     """
-        A Multiplexer
+        A Multiplexer.
+
+        Named parameters from 'a' to 'z' are used as inputs. e.g.::
+
+            from pyhdl import *
+            a, b, c, d = Wire(), Wire(), Wire(), Wire()
+            sel = Wire(width=2)
+            out = Wire()
+            nand = Multiplexer(a=a, b=b, c=c, d=d, out=out, sel=sel, ways=4)
+
+        :param out: The output wire.
+        :param sel: The selector wire.
+        :param width: The width of the inputs.
+        :type width: int
+        :param ways: The number of inputs to the multiplexer.
+        :type ways: int
     """
 
     attributes = 'abcdefghijklmnopqrstuvwxyz'
@@ -181,7 +201,23 @@ class Multiplexer(_Combinatorial):
 
 class Demultiplexer(_Combinatorial):
     """
-        A Demultiplexer
+        A Demultiplexer.
+
+        Named parameters from 'a' to 'z' are used as outputs. e.g.::
+
+            from pyhdl import *
+            a, b, c, d = Wire(), Wire(), Wire(), Wire()
+            sel = Wire(width=2)
+            input = Wire()
+            nand = Multiplexer(a=a, b=b, c=c, d=d, input=input, sel=sel, ways=4)
+
+        :param input: The input wire.
+        :param sel: The selector wire.
+        :param width: The width of the outputs.
+        :type width: int
+        :param ways: The number of outputs from the demultiplexer.
+        :type ways: int
+
     """
 
     attributes = 'abcdefghijklmnopqrstuvwxyz'
@@ -228,6 +264,11 @@ class Demultiplexer(_Combinatorial):
 class HalfAdder(_Combinatorial):
     """
         A half adder.
+
+        :param a: The first operand of the half adder.
+        :param b: The second operand of the half adder.
+        :param out: The output of the half adder.
+        :param carry: The carry output from the half adder.
     """
 
     def __init__(self, a, b, out, carry):
@@ -271,6 +312,12 @@ class HalfAdder(_Combinatorial):
 class FullAdder(_Combinatorial):
     """
         A full adder.
+
+        :param a: The first operand of the half adder.
+        :param b: The second operand of the half adder.
+        :param cin: The carry input to the half adder.
+        :param out: The output of the half adder.
+        :param cout: The carry output from the half adder.
     """
 
     values = {
@@ -320,6 +367,12 @@ class FullAdder(_Combinatorial):
 class Adder(_Combinatorial):
     """
         An adder.
+
+        :param a: The first operand of the adder.
+        :param b: The second operand of the adder.
+        :param out: The output of the adder.
+        :param cout: The carry out flag from the adder.
+        :param width: The width of the adder.
     """
 
 
@@ -363,7 +416,11 @@ class Adder(_Combinatorial):
 
 class DFF(Gate):
     """
-        A D flip flop
+        A D flip flop.
+
+        :param input: The input to the DFF.
+        :param output: The output from the DFF.
+        :param default: The default value of the DFF.
     """
 
     def __init__(self, input, output, default):
@@ -393,6 +450,12 @@ class DFF(Gate):
 class Register(Gate):
     """
         A variable width register.
+
+        :param input: The input value to the register.
+        :param write: The write enable wire.
+        :param output: The output value from the register.
+        :param default: The default value of the register.
+        :type default: str
     """
 
     def __init__(self, input, write, output, default):
@@ -428,6 +491,15 @@ class Register(Gate):
 class Memory(Gate):
     """
         A variable width and depth memory.
+
+        :param input:   The input value to the memory.
+        :param output:  The output value from the memory.
+        :param write:   The write enable wire.
+        :param address: The address wire.
+        :param default: The default contents of the memory.
+        :type default: dict
+        :param width:   The width of the memory.
+        :type width: int
     """
 
     def __init__(self, input, output, write, address, default, width=1):

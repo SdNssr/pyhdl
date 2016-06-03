@@ -104,16 +104,16 @@ class TestXorGate(TwoInputTest, unittest.TestCase):
 class TestNotGate(unittest.TestCase):
 
     def setUp(self):
-        self.a, self.out = Wire(), Wire()
-        self.not_gate = NotGate(self.a, self.out)
+        self.inp, self.out = Wire(), Wire()
+        self.not_gate = NotGate(self.inp, self.out)
 
     def test_ticktock(self):
         self.not_gate.tick()
         self.not_gate.tock()
         self.test_default()
 
-    def assertVal(self, a, out):
-        self.a.val = a
+    def assertVal(self, inp, out):
+        self.inp.val = inp
         self.not_gate.eval()
         self.assertEqual(self.out.val, out)
 
@@ -125,7 +125,7 @@ class TestNotGate(unittest.TestCase):
         self.assertEqual(self.out.val, "x")
 
     def test_view(self):
-        assert self.not_gate.view('a') == self.a
+        assert self.not_gate.view('inp') == self.inp
         assert self.not_gate.view('out') == self.out
         assert self.not_gate.view('garbage') is None
 
