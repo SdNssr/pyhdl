@@ -42,7 +42,7 @@ System wide installation
 
 This is another option, though it is not recommended. Run pip with root privileges::
 
-    $ sudo pip install Flask
+    $ sudo pip install pyhdl
 
 Living on the Edge
 ------------------
