@@ -371,35 +371,28 @@ class Adder(_Combinatorial):
         :param a: The first operand of the adder.
         :param b: The second operand of the adder.
         :param out: The output of the adder.
-        :param cout: The carry out flag from the adder.
         :param width: The width of the adder.
     """
 
 
-    def __init__(self, a, b, out, cout, width=1):
+    def __init__(self, a, b, out, width=1):
         self.width = width
         self.size = (1 << width) - 1
         self.a = a
         self.b = b
 
         self.out = out
-        self.cout = cout
 
 
     def eval(self):
         if ('x' in self.a.val) or ('x' in self.b.val):
             self.out.val = 'x' * self.width
-            self.cout.val = 'x' * self.width
             return
 
         s = self.a.uival + self.b.uival
 
         self.out.uival = s
 
-        if self.out.uival != s:
-            self.cout.val = '1'
-        else:
-            self.cout.val = '0'
 
     def view(self, signal):
         if signal == "a":
@@ -408,8 +401,6 @@ class Adder(_Combinatorial):
             return self.b
         elif signal == "out":
             return self.out
-        elif signal == "cout":
-            return self.cout
         else:
             return None
 

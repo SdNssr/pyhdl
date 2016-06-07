@@ -330,15 +330,13 @@ class TestAdder(unittest.TestCase):
         self.a = Wire(width=16)
         self.b = Wire(width=16)
         self.out = Wire(width=16)
-        self.cout = Wire(width=16)
 
-        self.adder = Adder(a=self.a, b=self.b, out=self.out, cout=self.cout, width=16)
+        self.adder = Adder(a=self.a, b=self.b, out=self.out, width=16)
 
     def test_view(self):
         self.assertEqual(self.adder.view('a'), self.a)
         self.assertEqual(self.adder.view('b'), self.b)
         self.assertEqual(self.adder.view('out'), self.out)
-        self.assertEqual(self.adder.view('cout'), self.cout)
         self.assertEqual(self.adder.view('garbage'), None)
 
     def test_ticktock(self):
@@ -348,7 +346,6 @@ class TestAdder(unittest.TestCase):
 
     def test_default(self):
         self.assertEqual(self.out.val, 'xxxxxxxxxxxxxxxx')
-        self.assertEqual(self.cout.val, 'xxxxxxxxxxxxxxxx')
 
     def assertVals(self, a, b):
         self.a.ival = a
